@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum neo_commands {DF, AD, SB, ML, DV, O, I, JP, EQ, NE, GT, LT};
+enum neo_command_enumerate {DF, AD, SB, ML, DV, O, I, JP, EQ, NE, GT, LT};
 typedef struct {
   long ptr_l, prg_l, prg_c;
   short *ptr_k, *ptr_v, *prg;
