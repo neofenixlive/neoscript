@@ -1,4 +1,7 @@
 #include "neo.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 short *neo_pointer(neo *n, short k) {
   unsigned short i;
@@ -10,8 +13,6 @@ short *neo_pointer(neo *n, short k) {
   n->ptr_k[i] = k; n->ptr_v[i] = 0; n->ptr_c++;
   return &n->ptr_v[i];
 }
-
-
 
 neo *neo_create() {
   neo *n = malloc(sizeof(neo));
@@ -25,12 +26,10 @@ void neo_delete(neo *n) {
   free(n->prg); free(n);
 }
 
-
-
 void neo_new_program(neo *n, char *txt) {
   char *str = NULL;
   long str_l = 0;
-  char c = 255, char s = 0;
+  char c = 255, s = 0;
   long i = 0;
   free(n->prg); n->prg = NULL; n->prg_l = 0;
   while(c != '\0') {
@@ -52,23 +51,23 @@ void neo_new_program(neo *n, char *txt) {
         case '-': datcom[0] = SB; break;
         case '*': datcom[0] = ML; break;
         case '/': datcom[0] = DV; break;
-        case '!': datcom[0] = O;  break;
-        case '?': datcom[0] = I;  break;
-        case '&': datcom[0] = JP; break;
+        case '@': datcom[0] = JP; break;
         case '=': datcom[0] = EQ; break;
         case '~': datcom[0] = NE; break;
         case '>': datcom[0] = GT; break;
         case '<': datcom[0] = LT; break;
+        case '!': datcom[0] = O;  break;
+        case '?': datcom[0] = I;  break;
       }
       datcom[0] = (datcom[0] & 0xFF) << 8;
       if(partxt[1]) {
-        if(partxt[1][0] == '&') {
+        if(partxt[1][0] == '$') {
           datcom[0] |= 1;
           datcom[1]      = (short) strtol(&partxt[1][1], NULL, 10);
         } else datcom[1] = (short) strtol(&partxt[1][0], NULL, 10);
       }
       if(partxt[2]) {
-        if(partxt[2][0] == '&') {
+        if(partxt[2][0] == '$') {
           datcom[0] |= 2;
           datcom[2]      = (short) strtol(&partxt[2][1], NULL, 10);
         } else datcom[2] = (short) strtol(&partxt[2][0], NULL, 10);
@@ -107,13 +106,13 @@ void neo_run_program(neo *n) {
       case SB: *dat[0] = *dat[0] - *dat[1]; break;
       case ML: *dat[0] = *dat[0] * *dat[1]; break;
       case DV: *dat[0] = *dat[0] / *dat[1]; break;
-      case O:  putchar(*dat[0]);            break;
-      case I:  *dat[0] = getchar();         break;
       case JP: n->prg_c = *dat[0]*3-3;      break;
       case EQ: if(*dat[0] == 0) n->prg_c += *dat[1]*3-3; break;
       case NE: if(*dat[0] != 0) n->prg_c += *dat[1]*3-3; break;
       case GT: if(*dat[0] > 0)  n->prg_c += *dat[1]*3-3; break;
       case LT: if(*dat[0] < 0)  n->prg_c += *dat[1]*3-3; break;
+      case O: printf("%hd\n", *dat[0]); break;
+      case I: scanf("%hd", dat[0]);     break;
     }
     n->prg_c += 3;
   }

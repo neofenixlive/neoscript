@@ -11,27 +11,28 @@ guide for neoscript
 
 - data type :
   can be literal (-32768 to 32767)
-  can be pointer (&-32768 to &32767)
+  can be pointer ($0 to $65535)
   
 - features :
   blank spaces and new lines are ignored
-  skips go to the Xth command, not X+1 or X-1
+  undefined values are treated as 0
+  jumps and branches go to the Xth command, not X+1 or X-1
 
 - commands :
   # this is a comment #
-  :, x, y; # define x as y                              #
-  +, x, y; # add y to x                                 #
-  -, x, y; # subtract y from x                          #
-  *, x, y; # multiply x by y                            #
-  /, x, y; # divide x by y                              #
-  !, x;    # print x as character                       #
-  ?, x;    # scan character to x                        #
-  &, x;    # jump to command x                          #
-  =, x, y; # skip y commands if x is equal to 0         #
-  ~, x, y; # skip y commands if x is not equal to 0     #
-  >, x, y; # skip y commands if x is greater than 0     #
-  <, x, y; # skip y commands if x is lesser than 0      #
-
+  :, x, y; # define x as y                          #
+  +, x, y; # add y to x                             #
+  -, x, y; # subtract y from x                      #
+  *, x, y; # multiply x by y                        #
+  /, x, y; # divide x by y                          #
+  @, x;    # jump to command x                      #
+  =, x, y; # skip y commands if x is equal to 0     #
+  ~, x, y; # skip y commands if x is not equal to 0 #
+  >, x, y; # skip y commands if x is greater than 0 #
+  <, x, y; # skip y commands if x is lesser than 0  #
+  !, x   ; # print x as number                      #
+  ?, x   ; # scan to x number                       #
+  
 --------------------
 made by neofenixlive
 --------------------

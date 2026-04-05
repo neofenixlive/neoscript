@@ -1,11 +1,7 @@
 #ifndef __NEOSCRIPT
 #define __NEOSCRIPT
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-enum neo_commands {DF, AD, SB, ML, DV, O, I, JP, EQ, NE, GT, LT};
+enum neo_commands { DF, AD, SB, ML, DV, JP, EQ, NE, GT, LT, O, I };
 typedef struct {
   unsigned short ptr_c, prg_l, prg_c;
   short *ptr_k, *ptr_v, *prg;

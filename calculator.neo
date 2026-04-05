@@ -1,0 +1,16 @@
+# simple calculator #
+
+?, $0;    # scan first number #
+?, $1;    # scan second number #
+?, $2;    # scan operator #
+
+=, $2, 3; # check if operator is addition #
+
+# subtraction #
+-, $0, $1;
+=, 0, 2;
+
+# addition #
++, $0, $1;
+
+!, $0;    # output result #

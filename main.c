@@ -1,4 +1,6 @@
 #include "neo.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char** argv) {
   FILE *scr; neo *n;
