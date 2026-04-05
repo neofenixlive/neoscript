@@ -1,20 +1,17 @@
 #include "neo.h"
 
 short *neo_pointer(neo *n, short k) {
-  short low = 0, hig = n->ptr_c, mid;
-  while(low < hig) {
-    mid = (low + hig) / 2;
-    if(n->ptr_k[mid] == k) return &n->ptr_v[mid];
-    else if(n->ptr_k[mid] < k) low = mid + 1;
-    else if(n->ptr_k[mid] > k) hig = mid;
+  unsigned short i;
+  for(i = 0; i < n->ptr_c; i++) {
+    if(n->ptr_k[i] == k) return &n->ptr_v[i];
   }
   n->ptr_k = realloc(n->ptr_k, sizeof(short)*(n->ptr_c+1));
   n->ptr_v = realloc(n->ptr_v, sizeof(short)*(n->ptr_c+1));
-  memmove(&n->ptr_k[low+1], &n->ptr_k[low], sizeof(short)*(n->ptr_c-low));
-  memmove(&n->ptr_v[low+1], &n->ptr_v[low], sizeof(short)*(n->ptr_c-low));
-  n->ptr_k[low] = k; n->ptr_v[low] = 0; n->ptr_c++;
-  return &n->ptr_v[low];
+  n->ptr_k[i] = k; n->ptr_v[i] = 0; n->ptr_c++;
+  return &n->ptr_v[i];
 }
+
+
 
 neo *neo_create() {
   neo *n = malloc(sizeof(neo));
@@ -28,9 +25,13 @@ void neo_delete(neo *n) {
   free(n->prg); free(n);
 }
 
+
+
 void neo_new_program(neo *n, char *txt) {
-  long i = 0, str_l = 0;
-  char c = 255, s = 0, *str = NULL;
+  char *str = NULL;
+  long str_l = 0;
+  char c = 255, char s = 0;
+  long i = 0;
   free(n->prg); n->prg = NULL; n->prg_l = 0;
   while(c != '\0') {
     c = txt[i];
