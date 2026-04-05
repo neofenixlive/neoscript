@@ -1,4 +1,4 @@
-#include "NEO.H"
+#include "neo.h"
 
 short *neo_pointer(neo *n, short k) {
   unsigned short i;
