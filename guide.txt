@@ -3,35 +3,36 @@ guide for neoscript
 ===================
 
 - syntax :
-  C, A, B;
+  C, A, B,
   C is command
   A is data 1
   B is data 2
-  ; is delimiter
+  , is separator
 
 - data type :
-  can be literal (-32768 to 32767)
-  can be pointer ($0 to $65535)
+  can be literal (-128 to 127)
+  can be pointer ($0 to $255)
   
 - features :
   blank spaces and new lines are ignored
   undefined values are treated as 0
-  jumps and branches go to the Xth command, not X+1 or X-1
+  jumps go to the Xth command, not X+1 or X-1
+  pointers also work as $-128 to $127
 
 - commands :
   # this is a comment #
-  :, x, y; # define x as y                          #
-  +, x, y; # add y to x                             #
-  -, x, y; # subtract y from x                      #
-  *, x, y; # multiply x by y                        #
-  /, x, y; # divide x by y                          #
-  @, x;    # jump to command x                      #
-  =, x, y; # skip y commands if x is equal to 0     #
-  ~, x, y; # skip y commands if x is not equal to 0 #
-  >, x, y; # skip y commands if x is greater than 0 #
-  <, x, y; # skip y commands if x is lesser than 0  #
-  !, x   ; # print x as number                      #
-  ?, x   ; # scan to x number                       #
+  :, x, y, # define x as y                          #
+  +, x, y, # add y to x                             #
+  -, x, y, # subtract y from x                      #
+  *, x, y, # multiply x by y                        #
+  /, x, y, # divide x by y                          #
+  &, x,    # jump x commands                        #
+  =, x, y, # jump y commands if x is equal to 0     #
+  ~, x, y, # jump y commands if x is not equal to 0 #
+  >, x, y, # jump y commands if x is greater than 0 #
+  <, x, y, # jump y commands if x is lesser than 0  #
+  !, x,    # put x as character                     #
+  ?, x,    # get character to x                     #
   
 --------------------
 made by neofenixlive
