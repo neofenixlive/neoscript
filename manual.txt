@@ -3,11 +3,11 @@ manual for neoscript
 ====================
 
 - syntax :
-  C, A, B;
-  C is the command
-  A is the first data
-  B is the second data
-  , and ; are separators
+  A, B, C.
+  A is the instruction
+  B is the first data
+  C is the second data
+  , and . are separators
 
 - data type :
   can be literal (-128 to 127)
@@ -17,20 +17,20 @@ manual for neoscript
   blank spaces and new lines are ignored
   undefined values are treated as 0
 
-- commands :
+- instructions :
   # this is a comment #
-  :, x, y; # define x as y                          #
-  +, x, y; # add y to x                             #
-  -, x, y; # subtract y from x                      #
-  *, x, y; # multiply x by y                        #
-  /, x, y; # divide x by y                          #
-  &, x;    # jump x commands                        #
-  =, x, y; # jump y commands if x is equal to 0     #
-  ~, x, y; # jump y commands if x is not equal to 0 #
-  >, x, y; # jump y commands if x is greater than 0 #
-  <, x, y; # jump y commands if x is lesser than 0  #
-  !, x;    # put x as character output              #
-  ?, x;    # get input character to x               #
+  :, x, y. # define x as y                              #
+  +, x, y. # add y to x                                 #
+  -, x, y. # subtract y from x                          #
+  *, x, y. # multiply x by y                            #
+  /, x, y. # divide x by y                              #
+  @, x.    # jump x instructions                        #
+  =, x, y. # jump y instructions if x is equal to 0     #
+  ~, x, y. # jump y instructions if x is not equal to 0 #
+  >, x, y. # jump y instructions if x is greater than 0 #
+  <, x, y. # jump y instructions if x is lesser than 0  #
+  !, x.    # put x as character output                  #
+  ?, x.    # get input character to x                   #
   
 --------------------
 made by neofenixlive

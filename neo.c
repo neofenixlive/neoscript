@@ -3,32 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-signed char *neo_pointer(neo *n, signed char k) {
-  int i;
-  for(i = 0; i < n->ptr; i++) {
-    if(n->ptr_k[i] == k) return &n->ptr_v[i];
-  }
-  n->ptr = i + 1;
-  n->ptr_k = realloc(n->ptr_k, sizeof(char)*n->ptr);
-  n->ptr_v = realloc(n->ptr_v, sizeof(char)*n->ptr);
-  n->ptr_k[i] = k; n->ptr_v[i] = 0;
-  return &n->ptr_v[i];
-}
-
 neo *neo_create() {
   neo *n = malloc(sizeof(neo));
-  n->ptr = 0;
+  n->ptr = NULL;
+  n->prg = NULL;
   n->prg_l = 0;
   n->prg_c = 0;
-  n->ptr_k = NULL;
-  n->ptr_v = NULL;
-  n->prg = NULL;
   return n;
 }
 
 void neo_delete(neo *n) {
-  free(n->ptr_k);
-  free(n->ptr_v);
+  free(n->ptr);
   free(n->prg);
   free(n);
 }
@@ -41,8 +26,8 @@ void neo_new_program(neo *n, char *txt) {
   while(c != '\0') {
     c = txt[i];
     if(c == '#') s = !s;
-    else if(!s && c == ';') {
-      signed char datcom[3] = { 0, 0, 0 };
+    else if(!s && c == '.') {
+      signed char insdat[3] = { 0, 0, 0 };
       char *partxt[3] = { NULL, NULL, NULL };
       char *t = strtok(str, ",");
       int i = 0;
@@ -52,41 +37,41 @@ void neo_new_program(neo *n, char *txt) {
         i++;
       }
       switch(partxt[0][0]) {
-        case ':': datcom[0] = DF; break;
-        case '+': datcom[0] = AD; break;
-        case '-': datcom[0] = SB; break;
-        case '*': datcom[0] = ML; break;
-        case '/': datcom[0] = DV; break;
-        case '&': datcom[0] = JP; break;
-        case '=': datcom[0] = EQ; break;
-        case '~': datcom[0] = NE; break;
-        case '>': datcom[0] = GT; break;
-        case '<': datcom[0] = LT; break;
-        case '!': datcom[0] = O;  break;
-        case '?': datcom[0] = I;  break;
+        case ':': insdat[0] = DF; break;
+        case '+': insdat[0] = AD; break;
+        case '-': insdat[0] = SB; break;
+        case '*': insdat[0] = ML; break;
+        case '/': insdat[0] = DV; break;
+        case '@': insdat[0] = JP; break;
+        case '=': insdat[0] = EQ; break;
+        case '~': insdat[0] = NE; break;
+        case '>': insdat[0] = GT; break;
+        case '<': insdat[0] = LT; break;
+        case '!': insdat[0] = O;  break;
+        case '?': insdat[0] = I;  break;
       }
-      datcom[0] = (datcom[0] & 0xF) << 4;
+      insdat[0] = (insdat[0] & 0xF) << 4;
       if(partxt[1]) {
         if(partxt[1][0] == '$') {
-          datcom[0] |= 1;
-          datcom[1]      = (signed char) strtol(&partxt[1][1], NULL, 10);
-        } else datcom[1] = (signed char) strtol(&partxt[1][0], NULL, 10);
+          insdat[0] |= 1;
+          insdat[1]      = (char) strtol(&partxt[1][1], NULL, 10);
+        } else insdat[1] = (char) strtol(&partxt[1][0], NULL, 10);
       }
       if(partxt[2]) {
         if(partxt[2][0] == '$') {
-          datcom[0] |= 2;
-          datcom[2]      = (signed char) strtol(&partxt[2][1], NULL, 10);
-        } else datcom[2] = (signed char) strtol(&partxt[2][0], NULL, 10);
+          insdat[0] |= 2;
+          insdat[2]      = (char) strtol(&partxt[2][1], NULL, 10);
+        } else insdat[2] = (char) strtol(&partxt[2][0], NULL, 10);
       }
       if(n->prg == NULL) n->prg_l = 0;
       n->prg = realloc(n->prg, sizeof(char)*(n->prg_l+3));
-      n->prg[n->prg_l]   = datcom[0];
-      n->prg[n->prg_l+1] = datcom[1];
-      n->prg[n->prg_l+2] = datcom[2];
+      n->prg[n->prg_l]   = insdat[0];
+      n->prg[n->prg_l+1] = insdat[1];
+      n->prg[n->prg_l+2] = insdat[2];
       n->prg_l += 3;
       free(str); str = NULL;
     }
-    if(!s && !(c == '\n' || c == '\t' || c == ' ' || c == '#' || c == ';')) {
+    if(!s && !(c == '\n' || c == '\t' || c == ' ' || c == '#' || c == '.')) {
       if(str == NULL) l = 0;
       str = realloc(str, l+2);
       str[l] = c;
@@ -98,18 +83,18 @@ void neo_new_program(neo *n, char *txt) {
 }
 
 void neo_run_program(neo *n) {
-  printf("\033[H\033[2J");
+  free(n->ptr); n->ptr = calloc(1, 0xFF);
   n->prg_c = 0;
   while(n->prg_c < n->prg_l) {
-    signed char *com    = &n->prg[n->prg_c];
+    signed char *ins    = &n->prg[n->prg_c];
     signed char *dat[2] = { NULL, NULL };
-    switch(com[0] & 0xF) {
-      case 0: dat[0] = &com[1];                dat[1] = &com[2]; break;
-      case 1: dat[0] = neo_pointer(n, com[1]); dat[1] = &com[2]; break;
-      case 2: dat[0] = &com[1];                dat[1] = neo_pointer(n, com[2]); break;
-      case 3: dat[0] = neo_pointer(n, com[1]); dat[1] = neo_pointer(n, com[2]); break;
+    switch(ins[0] & 0xF) {
+      case 0: dat[0] = &ins[1];         dat[1] = &ins[2]; break;
+      case 1: dat[0] = &n->ptr[ins[1]]; dat[1] = &ins[2]; break;
+      case 2: dat[0] = &ins[1];         dat[1] = &n->ptr[ins[2]];  break;
+      case 3: dat[0] = &n->ptr[ins[1]]; dat[1] = &n->ptr[ins[2]];  break;
     }
-    switch((com[0] >> 4) & 0xF) {
+    switch((ins[0] >> 4) & 0xF) {
       case DF: *dat[0] = *dat[1];           break;
       case AD: *dat[0] = *dat[0] + *dat[1]; break;
       case SB: *dat[0] = *dat[0] - *dat[1]; break;
