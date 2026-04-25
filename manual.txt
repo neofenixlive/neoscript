@@ -1,5 +1,5 @@
 ================
-manual for erros
+manual for monte
 ================
 
 - syntax :
