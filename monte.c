@@ -1,28 +1,28 @@
-#include "neo.h"
+#include "monte.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-neo *neo_create() {
-  neo *n = malloc(sizeof(neo));
-  n->ptr = calloc(1, 0xFF);
-  n->prg = NULL;
-  n->prg_l = 0;
-  n->prg_c = 0;
-  return n;
+monte *monte_create() {
+  monte *m = malloc(sizeof(monte));
+  m->ptr = calloc(1, 0xFF);
+  m->prg = NULL;
+  m->prg_l = 0;
+  m->prg_c = 0;
+  return m;
 }
 
-void neo_delete(neo *n) {
-  free(n->ptr);
-  free(n->prg);
-  free(n);
+void monte_delete(monte *m) {
+  free(m,->ptr);
+  free(m->prg);
+  free(m);
 }
 
-void neo_new_program(neo *n, char *txt) {
+void monte_new_program(monte *m, char *txt) {
   char *str = NULL;
   char c = 1, s = 0;
   long i = 0, l = 0;
-  free(n->prg); n->prg = NULL;
+  free(m->prg); m->prg = NULL;
   while(c != '\0') {
     c = txt[i];
     if(c == '#') s = !s;
@@ -63,12 +63,12 @@ void neo_new_program(neo *n, char *txt) {
           insdat[2]      = (char) strtol(&partxt[2][1], NULL, 10);
         } else insdat[2] = (char) strtol(&partxt[2][0], NULL, 10);
       }
-      if(n->prg == NULL) n->prg_l = 0;
-      n->prg = realloc(n->prg, sizeof(char)*(n->prg_l+3));
-      n->prg[n->prg_l]   = insdat[0];
-      n->prg[n->prg_l+1] = insdat[1];
-      n->prg[n->prg_l+2] = insdat[2];
-      n->prg_l += 3;
+      if(m->prg == NULL) m->prg_l = 0;
+      m->prg = realloc(m->prg, sizeof(char)*(m->prg_l+3));
+      m->prg[m->prg_l]   = insdat[0];
+      m->prg[m->prg_l+1] = insdat[1];
+      m->prg[m->prg_l+2] = insdat[2];
+      m->prg_l += 3;
       free(str); str = NULL;
     }
     if(!s && !(c == '\n' || c == '\t' || c == ' ' || c == '#' || c == '.')) {
@@ -82,16 +82,16 @@ void neo_new_program(neo *n, char *txt) {
   }
 }
 
-void neo_run_program(neo *n) {
+void monte_run_program(monte *m) {
   n->prg_c = 0;
-  while(n->prg_c < n->prg_l) {
-    signed char *ins    = &n->prg[n->prg_c];
+  while(m->prg_c < m->prg_l) {
+    signed char *ins    = &m->prg[m->prg_c];
     signed char *dat[2] = { NULL, NULL };
     switch(ins[0] & 0xF) {
       case 0: dat[0] = &ins[1];         dat[1] = &ins[2]; break;
-      case 1: dat[0] = &n->ptr[ins[1]]; dat[1] = &ins[2]; break;
-      case 2: dat[0] = &ins[1];         dat[1] = &n->ptr[ins[2]];  break;
-      case 3: dat[0] = &n->ptr[ins[1]]; dat[1] = &n->ptr[ins[2]];  break;
+      case 1: dat[0] = &m->ptr[ins[1]]; dat[1] = &ins[2]; break;
+      case 2: dat[0] = &ins[1];         dat[1] = &m->ptr[ins[2]];  break;
+      case 3: dat[0] = &m->ptr[ins[1]]; dat[1] = &m->ptr[ins[2]];  break;
     }
     switch((ins[0] >> 4) & 0xF) {
       case DF: *dat[0] = *dat[1];           break;
@@ -100,13 +100,13 @@ void neo_run_program(neo *n) {
       case ML: *dat[0] = *dat[0] * *dat[1]; break;
       case DV: *dat[0] = *dat[0] / *dat[1]; break;
       case JP: n->prg_c = *dat[0]*3-3;      break;
-      case EQ: if(*dat[0] == 0) n->prg_c += *dat[1]*3-3; break;
-      case NE: if(*dat[0] != 0) n->prg_c += *dat[1]*3-3; break;
-      case GT: if(*dat[0] > 0)  n->prg_c += *dat[1]*3-3; break;
-      case LT: if(*dat[0] < 0)  n->prg_c += *dat[1]*3-3; break;
+      case EQ: if(*dat[0] == 0) m->prg_c += *dat[1]*3-3; break;
+      case NE: if(*dat[0] != 0) m->prg_c += *dat[1]*3-3; break;
+      case GT: if(*dat[0] > 0)  m->prg_c += *dat[1]*3-3; break;
+      case LT: if(*dat[0] < 0)  m->prg_c += *dat[1]*3-3; break;
       case O: printf("%c", *dat[0]); break;
       case I: scanf(" %c", dat[0]);  break;
     }
-    n->prg_c += 3;
+    m->prg_c += 3;
   }
 }
