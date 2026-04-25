@@ -83,7 +83,7 @@ void monte_new_program(monte *m, char *txt) {
 }
 
 void monte_run_program(monte *m) {
-  n->prg_c = 0;
+  m->prg_c = 0;
   while(m->prg_c < m->prg_l) {
     signed char *ins    = &m->prg[m->prg_c];
     signed char *dat[2] = { NULL, NULL };
