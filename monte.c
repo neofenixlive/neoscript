@@ -13,7 +13,7 @@ monte *monte_create() {
 }
 
 void monte_delete(monte *m) {
-  free(m,->ptr);
+  free(m->ptr);
   free(m->prg);
   free(m);
 }
