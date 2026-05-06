@@ -1,23 +1,27 @@
-================
-manual for monte
-================
+```
+manual for the monte language
+--------------------------------------------------
 
-- syntax :
+syntax
+--------------------------------------------------
   A, B, C.
   A is the instruction
   B is the first data
   C is the second data
   , and . are separators
 
-- data type :
+data type
+--------------------------------------------------
   can be literal (-128 to 127)
   can be pointer ($0 to $255)
   
-- features :
+features
+--------------------------------------------------
   blank spaces and new lines are ignored
   undefined values are treated as 0
 
-- instructions :
+instructions
+--------------------------------------------------
   # this is a comment #
   :, x, y. # define x as y                              #
   +, x, y. # add y to x                                 #
@@ -31,7 +35,4 @@ manual for monte
   <, x, y. # jump y instructions if x is lesser than 0  #
   !, x.    # put x as character output                  #
   ?, x.    # get input character to x                   #
-  
---------------------
-made by neofenixlive
---------------------
+```
